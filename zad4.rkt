@@ -1,8 +1,10 @@
 #lang racket
 
 ;; zadanie 16
-(define (append l m)
-  (flatten (list l m)))
+(define (append l1 l2)
+  (if (null? l1)
+    l2
+    (cons (car l1) (append (cdr l1) l2))))
 
 (append '(1 2 3) 4)
 
@@ -16,8 +18,8 @@
 (define (reverse lis)
   (define (helper l acc)
     (if (empty? (cdr l))
-      (flatten (list (car l) acc))
-      (helper (cdr l) (flatten (list (car l) acc)))))
+      (append (list (car l)) acc)
+      (helper (cdr l) (append (list (car l)) acc))))
   (helper lis '()))
 
 (reverse '(1 2 3 4))
@@ -25,10 +27,10 @@
 (define (delete x l)
   (define (helper l acc)
     (if (empty? (cdr l))
-      (flatten (list acc (car l)))
+      (append acc (list (car l)))
       (if (= x (car l))
-        (flatten (list acc (cdr l)))
-        (helper (cdr l) (flatten (list acc (car l)))))))
+        (append acc (cdr l))
+        (helper (cdr l) (append acc (list (car l)))))))
   (helper l '()))
 
 (delete 3 '(1 2 3 4 3 5))
